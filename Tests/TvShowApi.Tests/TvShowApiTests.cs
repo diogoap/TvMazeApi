@@ -45,10 +45,10 @@ namespace TvShowApi.Tests
             var client = application.CreateClient();
 
             var show = _fixture.Create<Show>();
-            var response = await client.PostAsJsonAsync("/shows", show);
+            var addShowResponse = await client.PostAsJsonAsync("/shows", show);
 
-            response.Should().NotBeNull();
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            addShowResponse.Should().NotBeNull();
+            addShowResponse.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Act
             var showFromApi = await client.GetFromJsonAsync<Show>($"/shows/{show.Id}");
@@ -85,9 +85,9 @@ namespace TvShowApi.Tests
             {
                 var show = _fixture.Build<Show>().With(s => s.Id, i).Create();
                 shows.Add(show);
-                var response = await client.PostAsJsonAsync("/shows", show);
-                response.Should().NotBeNull();
-                response.StatusCode.Should().Be(HttpStatusCode.Created);
+                var addShowResponse = await client.PostAsJsonAsync("/shows", show);
+                addShowResponse.Should().NotBeNull();
+                addShowResponse.StatusCode.Should().Be(HttpStatusCode.Created);
             }
 
             // Act
@@ -121,9 +121,9 @@ namespace TvShowApi.Tests
             for (int i = 1; i <= 10; i++)
             {
                 var show = _fixture.Build<Show>().With(s => s.Id, i).Create();
-                var response = await client.PostAsJsonAsync("/shows", show);
-                response.Should().NotBeNull();
-                response.StatusCode.Should().Be(HttpStatusCode.Created);
+                var addShowResponse = await client.PostAsJsonAsync("/shows", show);
+                addShowResponse.Should().NotBeNull();
+                addShowResponse.StatusCode.Should().Be(HttpStatusCode.Created);
             }
 
             // Act
@@ -148,9 +148,9 @@ namespace TvShowApi.Tests
             for (int i = 1; i <= 5; i++)
             {
                 var show = _fixture.Build<Show>().With(s => s.Id, i).Create();
-                var response = await client.PostAsJsonAsync("/shows", show);
-                response.Should().NotBeNull();
-                response.StatusCode.Should().Be(HttpStatusCode.Created);
+                var addShowResponse = await client.PostAsJsonAsync("/shows", show);
+                addShowResponse.Should().NotBeNull();
+                addShowResponse.StatusCode.Should().Be(HttpStatusCode.Created);
             }
 
             // Act
@@ -185,9 +185,9 @@ namespace TvShowApi.Tests
             for (int i = 1; i <= 5; i++)
             {
                 var show = _fixture.Build<Show>().With(s => s.Id, i).Create();
-                var response = await client.PostAsJsonAsync("/shows", show);
-                response.Should().NotBeNull();
-                response.StatusCode.Should().Be(HttpStatusCode.Created);
+                var addShowResponse = await client.PostAsJsonAsync("/shows", show);
+                addShowResponse.Should().NotBeNull();
+                addShowResponse.StatusCode.Should().Be(HttpStatusCode.Created);
             }
 
             // Act
@@ -216,9 +216,9 @@ namespace TvShowApi.Tests
             var client = application.CreateClient();
 
             var show = _fixture.Create<Show>();
-            var response = await client.PostAsJsonAsync("/shows", show);
-            response.Should().NotBeNull();
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            var addShowResponse = await client.PostAsJsonAsync("/shows", show);
+            addShowResponse.Should().NotBeNull();
+            addShowResponse.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Act
             Func<Task> showFromApiAction = async () => await client.GetFromJsonAsync<Show>($"/shows{queryString}");

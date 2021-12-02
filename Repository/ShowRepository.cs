@@ -17,11 +17,6 @@ namespace Repository
             _db.Insert(show);
         }
 
-        public IEnumerable<Show> GetShows()
-        {   
-            return _db.Query<Show>().ToEnumerable();
-        }
-
         public IEnumerable<Show> GetShows(int pageNumber, int pageSize)
         {
             var showList = _db.Query<Show>().Limit(pageSize).Offset((pageNumber - 1) * pageSize).ToEnumerable();

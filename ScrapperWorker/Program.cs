@@ -26,7 +26,6 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddTransient<IShowRepository, ShowRepository>();
         services.AddTransient<IShowPageRepository, ShowPageRepository>();
-        services.AddTransient<ITvMazeApiClient, TvMazeApiClient>();
         services.AddSingleton<ILiteRepository>(x => new LiteRepository(configuration["ShowsDbConnectionString"]));
         services.AddTransient<ITvShowScrapperService, TvShowScrapperService>();
         services.AddHostedService<TvMazeScrapperWorker>();
