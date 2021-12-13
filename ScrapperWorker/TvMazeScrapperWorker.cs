@@ -19,7 +19,7 @@ namespace ScrapperWorker
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                await _tvShowScrapper.LoadShows();
+                await _tvShowScrapper.LoadShows(stoppingToken);
 
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }

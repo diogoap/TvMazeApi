@@ -70,7 +70,7 @@ namespace ScrapperWorker.Tests.Services
             var showsFromApiPage4 = CreateShowsAndSetupMocks(0, 4);
 
             // Act
-            await tvShowScrapperService.LoadShows();
+            await tvShowScrapperService.LoadShows(default);
 
             // Assert
             _showPageRepositoryMock.Verify(x => x.AddShowPage(0), Times.Never);
@@ -100,7 +100,7 @@ namespace ScrapperWorker.Tests.Services
             var showsFromApiPage6 = CreateShowsAndSetupMocks(0, 6);
 
             // Act
-            await tvShowScrapperService.LoadShows();
+            await tvShowScrapperService.LoadShows(default);
 
             // Assert
             _showPageRepositoryMock.Verify(x => x.AddShowPage(0), Times.Never);
@@ -130,7 +130,7 @@ namespace ScrapperWorker.Tests.Services
             var showsFromApiPage1 = CreateShowsAndSetupMocks(0, 1);
 
             // Act
-            await tvShowScrapperService.LoadShows();
+            await tvShowScrapperService.LoadShows(default);
 
             // Assert
             _showPageRepositoryMock.Verify(x => x.AddShowPage(It.IsAny<int>()), Times.Never);
@@ -148,11 +148,11 @@ namespace ScrapperWorker.Tests.Services
             var pageNumber = _fixture.Create<int>();
 
             var showFromApi = _fixture.Build<Show>().Without(x => x.Cast).Create();
-            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber)).ReturnsAsync(new List<Show> { showFromApi });
+            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber, default)).ReturnsAsync(new List<Show> { showFromApi });
             _showRepositoryMock.Setup(x => x.GetShow(showFromApi.Id)).Returns(null as Domain.Models.Show);
 
             var castList = _fixture.CreateMany<Cast>();
-            _tvMazeApiClientMock.Setup(x => x.LoadCastFromTvMazeApi(showFromApi.Id)).ReturnsAsync(castList);
+            _tvMazeApiClientMock.Setup(x => x.LoadCastFromTvMazeApi(showFromApi.Id, default)).ReturnsAsync(castList);
 
             Domain.Models.Show? showSaved = null;
             _showRepositoryMock.Setup(x => x.AddShow(It.IsAny<Domain.Models.Show>())).
@@ -161,7 +161,7 @@ namespace ScrapperWorker.Tests.Services
             _showPageRepositoryMock.Setup(x => x.AddShowPage(pageNumber));
 
             // Act
-            var result = await tvShowScrapperService.LoadShowsByPageNumber(pageNumber);
+            var result = await tvShowScrapperService.LoadShowsByPageNumber(pageNumber, default);
 
             // Assert
             result.Should().BeTrue();
@@ -174,10 +174,10 @@ namespace ScrapperWorker.Tests.Services
             // Arrange
             var tvShowScrapperService = new TvShowScrapperService(_loggerMock.Object, _tvMazeApiClientMock.Object, _showRepositoryMock.Object, _showPageRepositoryMock.Object);
             var pageNumber = _fixture.Create<int>();
-            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber)).ReturnsAsync(null as IEnumerable<Show>);
+            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber, default)).ReturnsAsync(null as IEnumerable<Show>);
 
             // Act
-            var result = await tvShowScrapperService.LoadShowsByPageNumber(pageNumber);
+            var result = await tvShowScrapperService.LoadShowsByPageNumber(pageNumber, default);
 
             // Assert
             result.Should().BeFalse();
@@ -191,7 +191,7 @@ namespace ScrapperWorker.Tests.Services
             var pageNumber = _fixture.Create<int>();
 
             var showFromApi = _fixture.Build<Show>().Without(x => x.Cast).Create();
-            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber)).ReturnsAsync(new List<Show> { showFromApi });
+            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber, default)).ReturnsAsync(new List<Show> { showFromApi });
 
             var showDomainModel = new Domain.Models.Show
             {
@@ -202,7 +202,7 @@ namespace ScrapperWorker.Tests.Services
             _showPageRepositoryMock.Setup(x => x.AddShowPage(pageNumber));
 
             // Act
-            var result = await tvShowScrapperService.LoadShowsByPageNumber(pageNumber);
+            var result = await tvShowScrapperService.LoadShowsByPageNumber(pageNumber, default);
 
             // Assert
             result.Should().BeTrue();
@@ -214,19 +214,19 @@ namespace ScrapperWorker.Tests.Services
         {
             if (numberOfShows == 0)
             {
-                _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber)).ReturnsAsync(null as IEnumerable<Show>);
+                _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber, default)).ReturnsAsync(null as IEnumerable<Show>);
                 return null;
             }
 
             var showsPage = _fixture.Build<Show>().Without(x => x.Cast).CreateMany(numberOfShows);
-            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber)).ReturnsAsync(showsPage);
+            _tvMazeApiClientMock.Setup(x => x.LoadShowsFromTvMazeApiByPageNumber(pageNumber, default)).ReturnsAsync(showsPage);
 
             foreach (var show in showsPage)
             {
                 _showRepositoryMock.Setup(x => x.GetShow(show.Id)).Returns(null as Domain.Models.Show);
 
                 var castList = _fixture.CreateMany<Cast>();
-                _tvMazeApiClientMock.Setup(x => x.LoadCastFromTvMazeApi(show.Id)).ReturnsAsync(castList);
+                _tvMazeApiClientMock.Setup(x => x.LoadCastFromTvMazeApi(show.Id, default)).ReturnsAsync(castList);
 
                 _showRepositoryMock.Setup(x => x.AddShow(It.IsAny<Domain.Models.Show>()));
             }

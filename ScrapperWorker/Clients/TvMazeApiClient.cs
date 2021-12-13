@@ -15,13 +15,13 @@ namespace ScrapperWorker.Clients
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Show>?> LoadShowsFromTvMazeApiByPageNumber(int showPageNumber)
+        public async Task<IEnumerable<Show>?> LoadShowsFromTvMazeApiByPageNumber(int showPageNumber, CancellationToken cancellationToken)
         {
             IEnumerable<Show>? showsPage;
             try
             {
                 _logger.LogDebug($"TvMazeApi: Getting shows for page: {showPageNumber}");
-                showsPage = await _httpClient.GetFromJsonAsync<IEnumerable<Show>>($"shows?page={showPageNumber}");
+                showsPage = await _httpClient.GetFromJsonAsync<IEnumerable<Show>>($"shows?page={showPageNumber}", cancellationToken);
             }
             catch (HttpRequestException e)
             {
@@ -43,12 +43,12 @@ namespace ScrapperWorker.Clients
             return showsPage;
         }
 
-        public async Task<IEnumerable<Cast>?> LoadCastFromTvMazeApi(int showId)
+        public async Task<IEnumerable<Cast>?> LoadCastFromTvMazeApi(int showId, CancellationToken cancellationToken)
         {
             try
             {
                 _logger.LogDebug($"TvMazeApi: Getting cast for show ID: {showId}");
-                return await _httpClient.GetFromJsonAsync<IEnumerable<Cast>>($"shows/{showId}/cast");
+                return await _httpClient.GetFromJsonAsync<IEnumerable<Cast>>($"shows/{showId}/cast", cancellationToken);
             }
             catch (HttpRequestException e)
             {

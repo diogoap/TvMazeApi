@@ -20,18 +20,18 @@ namespace ScrapperWorker.Services
             _showPageRepository = showPageRepository;
         }
 
-        public async Task LoadShows()
+        public async Task LoadShows(CancellationToken cancellationToken)
         {
             var continueSearch = true;
             
-            while (continueSearch)
+            while (continueSearch && !cancellationToken.IsCancellationRequested)
             {
                 var sw = Stopwatch.StartNew();
 
                 var showPageNumber = _showPageRepository.GetLastStoredPage() + 1;
 
                 _logger.LogWarning($"Loading Show page number {showPageNumber} from Api.");
-                continueSearch = await LoadShowsByPageNumber(showPageNumber);
+                continueSearch = await LoadShowsByPageNumber(showPageNumber, cancellationToken);
 
                 if (!continueSearch)
                 {
@@ -45,9 +45,9 @@ namespace ScrapperWorker.Services
             }
         }
 
-        public async Task<bool> LoadShowsByPageNumber(int showPageNumber)
+        public async Task<bool> LoadShowsByPageNumber(int showPageNumber, CancellationToken cancellationToken)
         {
-            var loadShowsResult = await _tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(showPageNumber);
+            var loadShowsResult = await _tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(showPageNumber, cancellationToken);
 
             if (loadShowsResult == null)
             {
@@ -57,13 +57,19 @@ namespace ScrapperWorker.Services
 
             foreach (var show in loadShowsResult)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    _logger.LogDebug($"Cancellation requested. Stopping...");
+                    break;
+                }                
+
                 if (_showRepository.GetShow(show.Id) != null)
                 {
                     _logger.LogDebug($"Show with ID {show.Id} already exists. Skipping...");
                     continue;
                 }
 
-                var cast = await _tvMazeApiClient.LoadCastFromTvMazeApi(show.Id);
+                var cast = await _tvMazeApiClient.LoadCastFromTvMazeApi(show.Id, cancellationToken);
 
                 _logger.LogDebug($"ShowDB: Adding show ID - {show.Id} - Name: {show.Name} - Cast count: {show.Cast?.Count()}");
                 _showRepository.AddShow(Show.MapToDbModel(show, cast));

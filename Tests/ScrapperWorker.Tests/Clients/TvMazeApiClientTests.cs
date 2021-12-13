@@ -69,7 +69,7 @@ namespace ScrapperWorker.Tests.Clients
                 });
 
             // Act
-            var shows = await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>());
+            var shows = await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>(), default);
 
             // Assert
             shows.Should().NotBeNull();
@@ -93,7 +93,7 @@ namespace ScrapperWorker.Tests.Clients
                 });
 
             // Act
-            var shows = await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>());
+            var shows = await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>(), default);
 
             // Assert
             shows.Should().NotBeNull();
@@ -111,7 +111,7 @@ namespace ScrapperWorker.Tests.Clients
                 .ThrowsAsync(new HttpRequestException("NotFound", new Exception("NotFound"), HttpStatusCode.NotFound));
 
             // Act
-            var shows = await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>());
+            var shows = await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>(), default);
 
             // Assert
             shows.Should().BeNull();
@@ -130,7 +130,7 @@ namespace ScrapperWorker.Tests.Clients
                 .ThrowsAsync(new HttpRequestException("BadRequest", new Exception("BadRequest"), HttpStatusCode.BadRequest));
 
             // Act
-            Func<Task> showFromApiAction = async () => await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>());
+            Func<Task> showFromApiAction = async () => await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>(), default);
 
             // Assert
             await showFromApiAction.Should().ThrowAsync<HttpRequestException>().Where(ex => ex.StatusCode == HttpStatusCode.BadRequest);
@@ -149,7 +149,7 @@ namespace ScrapperWorker.Tests.Clients
                 .ThrowsAsync(new Exception("SomeError"));
 
             // Act
-            Func<Task> showFromApiAction = async () => await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>());
+            Func<Task> showFromApiAction = async () => await tvMazeApiClient.LoadShowsFromTvMazeApiByPageNumber(_fixture.Create<int>(), default);
 
             // Assert
             await showFromApiAction.Should().ThrowAsync<Exception>().WithMessage("SomeError");
@@ -176,7 +176,7 @@ namespace ScrapperWorker.Tests.Clients
                 });
 
             // Act
-            var castList = await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>());
+            var castList = await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>(), default);
 
             // Assert
             castList.Should().NotBeNull();
@@ -200,7 +200,7 @@ namespace ScrapperWorker.Tests.Clients
                 });
 
             // Act
-            var castList = await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>());
+            var castList = await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>(), default);
 
             // Assert
             castList.Should().NotBeNull();
@@ -220,7 +220,7 @@ namespace ScrapperWorker.Tests.Clients
                 .ThrowsAsync(new HttpRequestException("BadRequest", new Exception("BadRequest"), HttpStatusCode.BadRequest));
 
             // Act
-            Func<Task> castListFromApiAction = async () => await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>());
+            Func<Task> castListFromApiAction = async () => await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>(), default);
 
             // Assert
             await castListFromApiAction.Should().ThrowAsync<HttpRequestException>().Where(ex => ex.StatusCode == HttpStatusCode.BadRequest);
@@ -239,7 +239,7 @@ namespace ScrapperWorker.Tests.Clients
                 .ThrowsAsync(new Exception("SomeError"));
 
             // Act
-            Func<Task> castListFromApiAction = async () => await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>());
+            Func<Task> castListFromApiAction = async () => await tvMazeApiClient.LoadCastFromTvMazeApi(_fixture.Create<int>(), default);
 
             // Assert
             await castListFromApiAction.Should().ThrowAsync<Exception>().WithMessage("SomeError");

@@ -2,7 +2,7 @@
 {
     public interface ITvShowScrapperService
     {
-        Task LoadShows();
-        Task<bool> LoadShowsByPageNumber(int showPageNumber);
+        Task LoadShows(CancellationToken cancellationToken);
+        Task<bool> LoadShowsByPageNumber(int showPageNumber, CancellationToken cancellationToken);
     }
 }

@@ -21,7 +21,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/shows/{id}", ([FromRoute] int id, IShowRepository showRepository) =>
+app.MapGet("/shows/{id}", async ([FromRoute] int id, IShowRepository showRepository) =>
 {
     var show = showRepository.GetShow(id);
     return show != null ? Results.Ok(show) : Results.NotFound();
